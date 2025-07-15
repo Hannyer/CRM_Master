@@ -404,7 +404,8 @@
         CloseModalAddReservation();
         CloseModalModifyReservation();
 
-
+        $('#mdlAddReservation').on('hidden.bs.modal', clearNewReservationModal);
+     
         var fechaActual = new Date();
         var fechaFormateada = fechaActual.toISOString().split('T')[0];
         $('#txtCheckIn').val(fechaFormateada);
@@ -653,6 +654,27 @@
         $('#ebTax').text('0.00');
         $('#ebTotal').text('0.00');
     }
+    function clearNewReservationModal() {
+        $('#ddlAddReservationModal').val(null).trigger('change');
+
+        const hoy = new Date();
+        const hoyStr = hoy.toISOString().slice(0, 10);
+        $('#txtCheckIn').val(hoyStr);
+        const manana = new Date(hoy);
+        manana.setDate(manana.getDate() + 1);
+        $('#txtCheckOut').val(manana.toISOString().slice(0, 10));
+
+        $('#txtGuestCount').val(1);
+        $('#txtDescription').val('');
+        clearRoomSelection();
+
+        const checkIn = $('#txtCheckIn').val();
+        const checkOut = $('#txtCheckOut').val();
+        const guests = parseInt($('#txtGuestCount').val(), 10) || 1;
+        updateDatalistHotelRoomFromServer('roomCardsContainer', checkIn, checkOut, guests);
+    }
+
+
 
 
         function OpenModalAddReservation() {

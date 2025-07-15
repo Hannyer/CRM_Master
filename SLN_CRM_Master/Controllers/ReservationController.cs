@@ -151,7 +151,8 @@ namespace SLN_CRM_Master.Controllers
             reservationE.END_DATE = DateTime.Now;
             reservationE.ID_USER = (Session["User"] as UserE).ID;
             reservationE.ID_ROOM = reservation.RoomId;
-            reservationE.IdCard_Client = reservation.ClientId; 
+            reservationE.IdCard_Client = reservation.ClientId;
+            reservationE.creation_date = DateTime.Now;
             int IdGenerate = _reservation.Maintenance(reservationE);
 
 

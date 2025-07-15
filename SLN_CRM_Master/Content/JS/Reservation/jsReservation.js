@@ -8,26 +8,28 @@
             '#ddlAddRoomModal',
             true
         )) return;
+
         const days = tmpDays($('#txtCheckIn').val(), $('#txtCheckOut').val());
-        const description = $('#txtDescription').val().trim();
-        var reservation = {
+        const reservation = {
             ClientId: $('#ddlAddReservationModal').val(),
             CheckIn: $('#txtCheckIn').val(),
             CheckOut: $('#txtCheckOut').val(),
             GuestCount: parseInt($('#txtGuestCount').val(), 10),
             RoomId: $('#ddlAddRoomModal').val(),
-            Nights: days
+            Nights: days,
+            Description: $('#txtDescription').val().trim() || undefined
         };
-        if (description.length > 0) {
-            reservation.Description = description;
-        }
-        console.log(reservation.Description);
+
         mostrarSpinner();
         $.post('/Reservation/NewReservation', reservation)
             .done(function (response) {
-                ocultarSpinner();
+               
                 if (response.includes('exitosamente')) {
-                    Swal.fire({ text: response, icon: 'success' }).then(() => location.reload());
+                    
+                    $('#mdlAddReservation').modal('hide');
+                    clearNewReservationModal();
+                    FilterReservacion();
+                    Swal.fire({ text: response, icon: 'success' });
                 } else {
                     Swal.fire('', response, 'warning');
                 }
@@ -35,6 +37,10 @@
             .fail(function () {
                 ocultarSpinner();
                 Swal.fire('', 'Error al procesar la reservación. Intente de nuevo.', 'error');
+            })
+            .always(function () {
+               
+                ocultarSpinner();
             });
     } catch (e) {
         ocultarSpinner();
@@ -115,6 +121,7 @@ function DeleteReservation(Id) {
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
+                
              
                 var parameters = { Id: Id };
                 $.ajax({
@@ -128,7 +135,7 @@ function DeleteReservation(Id) {
                             text: response,
                             icon: 'success',
                             didClose: () => {
-                                window.location.href = '/Reservation/Index';
+                                FilterReservacion();
                             }
                         });
 

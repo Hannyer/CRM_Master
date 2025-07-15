@@ -103,6 +103,7 @@ namespace Repository.Repository
                         cmd.Parameters.AddWithValue("@P_ID_USER", reservation.ID_USER);
                         cmd.Parameters.AddWithValue("@p_Deposit", reservation.Deposit);
                         cmd.Parameters.AddWithValue("@p_create_by_external", reservation.create_by_external);
+                        cmd.Parameters.AddWithValue("@P_creation_date", reservation.creation_date);
 
 
                         using (SqlDataReader reader = cmd.ExecuteReader()) {
