@@ -1,0 +1,24 @@
+﻿@model IEnumerable<EntityLayer.TotalReportE>
+@using System.Globalization
+
+<div id="tablaContainerTotalReport" class="table-responsive"></div>
+<table id="tblTotalReport" class="table table-hover table-custom">
+    <thead>
+        <tr>
+            <th>Detalle</th>
+            
+            <th>Sub Total</th>
+            <th>Impuestos</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    @foreach (var totalReport in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(model => totalReport.Descripction)</td>
+            <td>@totalReport.SubTotalWithOutTax.ToString("C", CultureInfo.CreateSpecificCulture("es-CR"))</td>
+            <td>@totalReport.TaxAmount.ToString("C", CultureInfo.CreateSpecificCulture("es-CR"))</td>
+            <td>@totalReport.TotalAmount.ToString("C", CultureInfo.CreateSpecificCulture("es-CR"))</td>
+        </tr>
+    }
+</table>

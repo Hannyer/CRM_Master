@@ -1,0 +1,350 @@
+﻿@model EntityLayer.UserE
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+<link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel CTP</title>
+
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="~/Content/css/Css/Login.css" rel="stylesheet" />
+    <style>
+        body {
+    background: url('@Url.Content("~/Content/Img/Paisaje4.jpeg")') no-repeat center center fixed;
+    background-size: cover;
+    height: 50vh;
+    font-family: 'Montserrat', sans-serif;
+}
+        .custom-card {
+            border-radius: 0.5rem !important;
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.8) !important;
+            background-color: rgba(255, 255, 255, 0) !important;
+            backdrop-filter: blur(8px);
+        }
+
+        .login-panel-bootstrap {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+            backdrop-filter: blur(6px);
+        }
+
+        .register-panel-bootstrap {
+            background: rgba(44, 62, 80, 0.4) !important;
+            backdrop-filter: blur(6px);
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+
+        .spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background-color: rgba(255,255,255,0.8);
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+            .spinner i.fa-spinner {
+                color: #3498db;
+                font-size: 24px;
+            }
+
+
+        .register-panel-bootstrap {
+            background: linear-gradient(to right bottom, #2C3E50, #97afc7);
+        }
+
+        .custom-submit-btn {
+            background-color: #2C3E50 !important;
+            border-color: #2C3E50 !important;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .custom-submit-btn:hover {
+                background-color: #2C3E50 !important;
+                border-color: #2C3E50 !important;
+                transform: translateY(-2px);
+            }
+
+        .forgot-password-link {
+            font-size: 0.9em;
+            color: #2C3E50 !important;
+        }
+
+        .custom-register-btn:hover {
+            background-color: white;
+            color: #2C3E50;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="spinner" class="spinner">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </div>
+    <div class="main-wrapper d-flex justify-content-center align-items-center vh-100 ">
+        <div class="custom-card row g-0">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center p-5 login-panel-bootstrap">
+                <h2 class="mb-4 text-dark fw-bold">Nicoya reservation</h2>
+
+                <p class="text-muted position-relative separator-text w-100 text-center mb-4">Iniciar Sesión</p>
+
+                @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "w-100", style = "max-width: 320px;" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control rounded-pill custom-input", placeholder = "Correo" })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger d-block mt-1" })
+                    </div>
+
+                    <div class="mb-4">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control rounded-pill custom-input", placeholder = "Password" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger d-block mt-1" })
+                    </div>
+
+                    <a href="#" class="d-block text-decoration-none mb-4 text-end forgot-password-link" onclick="OpenModal('mdlForgotPassword'); return false;">¿Olvidaste tu contraseña?</a>
+
+                    <button type="submit" class="btn btn-success w-100 rounded-pill py-2 custom-submit-btn">INICIAR SESIÓN</button>
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger mt-3" })
+                }
+            </div>
+
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center p-5 text-white register-panel-bootstrap rounded-end">
+
+                <h2 class="display-4 fw-bold mb-3">¡Hola!</h2>
+                <p class="lead text-center mb-4">Registrese y gestione sus propias reservaciones.</p>
+                <button type="button" class="btn btn-outline-light rounded-pill px-4 py-2 custom-register-btn" onclick="OpenModal('mdlCreateUser'); ClearCreateUserForm();">REGISTRAR</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="mdlCreateUser" tabindex="-1" aria-labelledby="mdlCreateUserLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-white d-flex justify-content-center">
+                    <h5 class="modal-title" id="mdlCreateUserLabel">Crear Nueva Cuenta</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="txtNameCreate" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="txtNameCreate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtEmailCreate" class="form-label">Correo Electrónico:</label>
+                        <input type="email" class="form-control" id="txtEmailCreate" placeholder="ejemplo@dominio.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtPhoneNumberCreate" class="form-label">Número de Teléfono (8 dígitos):</label>
+                        <input type="tel" class="form-control" id="txtPhoneNumberCreate" placeholder="xxxxxxxx" maxlength="8" pattern="[0-9]{8}" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="ddlClient">Selecciona un tipo de Identificación:</label>
+                            <select id="ddlClient" name="TipoIdentificacionId" class="form-control">
+                                <option value="">Seleccione una opción...</option>
+                                @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.IdentificationList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="txtDocumentIDCreate" class="form-label">Cédula / Pasaporte:</label>
+                        <input type="text" class="form-control" id="txtDocumentIDCreate" placeholder="Ej: 1-2345-6789 (Cédula) / ABC123456 (Pasaporte)" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtPassCreate" class="form-label">Contraseña:</label>
+                        <input type="password" class="form-control" id="txtPassCreate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtConfirmPassCreate" class="form-label">Confirmar Contraseña:</label>
+                        <input type="password" class="form-control" id="txtConfirmPassCreate" required>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" id="btnCreateAccount" class="btn btn-secondary" onclick="CreateUserAccount()">Crear Cuenta</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" id="mdlForgotPassword" tabindex="-1" aria-labelledby="mdlForgotPasswordLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-secondary text-dark d-flex justify-content-center">
+                    <h5 class="modal-title" id="mdlForgotPasswordLabel">Recuperar Contraseña</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+                    <div class="mb-3">
+                        <label for="txtForgotEmail" class="form-label">Correo Electrónico:</label>
+                        <input type="email" class="form-control" id="txtForgotEmail" placeholder="tu_correo@ejemplo.com" required>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" id="btnSendResetLink" class="btn btn-secondary" onclick="sendPasswordResetLink()">Enviar Enlace de Restablecimiento</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function OpenModal(modalId) {
+            $('#' + modalId).modal('show');
+        }
+
+        function CloseModal(modalId) {
+            $('#' + modalId).modal('hide');
+        }
+
+        function ClearCreateUserForm() {
+            $('#txtNameCreate').val('');
+            $('#txtEmailCreate').val('');
+            $('#txtPhoneNumberCreate').val('');
+            $('#txtDocumentIDCreate').val('');
+            $('#txtPassCreate').val('');
+            $('#txtConfirmPassCreate').val('');
+            $('#ddlClient').val('');
+        }
+
+        function ShowMessageModal(type, title, message, redirectUrl = null) {
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: type,
+                confirmButtonText: 'Aceptar',
+                didClose: () => {
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    }
+                }
+            });
+        }
+
+        function CreateUserAccount() {
+            var name = $('#txtNameCreate').val();
+            var email = $('#txtEmailCreate').val();
+            var phoneNumber = $('#txtPhoneNumberCreate').val();
+            var documentID = $('#txtDocumentIDCreate').val();
+            var password = $('#txtPassCreate').val();
+            var confirmPassword = $('#txtConfirmPassCreate').val();
+
+            var identificationTypeID = null;
+            const ddlClientInput = document.getElementById('ddlClient');
+            identificationTypeID = ddlClientInput.value;
+
+
+            if (name.trim() === '' || email.trim() === '' ||
+                phoneNumber.trim() === '' || documentID.trim() === '' ||
+                password.trim() === '' || confirmPassword.trim() === '') {
+                ShowMessageModal('error', 'Campos Obligatorios', 'Por favor, complete todos los campos obligatorios.');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("RegisterNewUser", "Login")',
+                type: 'POST',
+                data: {
+                    Name: name,
+                    Email: email,
+                    PhoneNumber: phoneNumber,
+                    IdentificationType_Description: identificationTypeID,
+                    DocumentID: documentID,
+                    Password: password
+                },
+                success: function(response) {
+                    if (response.success) {
+                        ShowMessageModal('success', '¡Éxito!', 'Cuenta creada exitosamente. Ahora puedes iniciar sesión.', '@Url.Action("Index", "Home")');
+                        CloseModal('mdlCreateUser');
+                        ClearCreateUserForm();
+                    } else {
+                        ShowMessageModal('error', 'Error al Crear Cuenta', 'Error al crear la cuenta: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    ShowMessageModal('error', 'Error de Conexión', 'Ocurrió un error al intentar crear la cuenta. Intente de nuevo.');
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        function mostrarSpinner() {
+            $("#overlay").fadeIn();
+            $("#spinner").fadeIn();
+        }
+        function ocultarSpinner() {
+            $("#overlay").fadeOut();
+            $("#spinner").fadeOut();
+        }
+    function sendPasswordResetLink() {
+        var email = $('#txtForgotEmail').val();
+
+        if (email.trim() === '') {
+            ShowMessageModal('error', 'Campo Obligatorio', 'Por favor, ingrese su correo electrónico.');
+            return;
+        }
+        mostrarSpinner();
+        $.ajax({
+            url: '@Url.Action("SendPasswordResetLink", "Login")',
+            type: 'POST',
+            data: { email: email },
+            success: function(response) {
+                if (response.success) {
+                    ShowMessageModal('success', 'Correo Enviado', response.message);
+                    CloseModal('mdlForgotPassword');
+                    $('#txtForgotEmail').val('');
+                } else {
+                    ShowMessageModal('error', 'Error', response.message);
+                }
+
+                ocultarSpinner();
+            },
+            error: function(xhr, status, error) {
+                ShowMessageModal('error', 'Error de Conexión', 'Ocurrió un error al intentar enviar el correo. Intente de nuevo.');
+                console.error(xhr.responseText);
+                ocultarSpinner();
+            }
+        });
+
+    }
+    </script>
+</body>
+</html>
