@@ -6,6 +6,13 @@
 
 }
 
+<style>
+    .readonly-select {
+        pointer-events: none;
+        background-color: #e9ecef; 
+    }
+
+</style>
 
 <h2 style="text-align-last: center;">Mantenimiento de usuario</h2>
 
@@ -22,62 +29,17 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="table-responsive">
-
-        <table id="tblUser" class="table table-hover table-custom">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(model => user.Name)</td>
-                    <td>@Html.DisplayFor(model => user.Email)</td>
-
-                    <td>@Html.DisplayFor(model => user.Description)</td>
-                    <td>
-
-                        <input type="checkbox" class="form-check-input readonly-checkbox" readonly="readonly" disabled="disabled" @(user.Status ? "checked" : "")>
-
-                    </td>
-                    <td>
-                        <button type="button" class="btn green-button" onclick="OpenModalModifyRole(this,'mdlModifyUser')" data-user='@JsonConvert.SerializeObject(user)'>
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button type="button" id="btnDeleteClient" class="btn btn-danger" onclick="DeleteUser('@JsonConvert.SerializeObject(user)')">
-
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-
-                    </td>
-                    <td>@Html.HiddenFor(model => user.Password)</td>
-                </tr>
-            }
-
-        </table>
-    </div>
+<div id="contenedorVistaParcial" style="padding-bottom: 2rem;">
+    @Html.Partial("PartialViewUser", Model)
+    <br />
 </div>
 
 
 
+
 <br />
 <br />
 <br />
-
-
-
-
-
-
 
 
 @*Modal to add *@
@@ -90,20 +52,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12">
-                        <label for="txtNameAdd" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="txtNameAdd">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <label for="txtEmailAdd" class="form-label">Correo Electrónico:</label>
-                        <input type="email" class="form-control" id="txtEmailAdd" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <label for="txtPhoneAdd" class="form-label">Teléfono (8 dígitos):</label>
-                        <input type="tel" class="form-control" id="txtPhoneAdd" placeholder="xxxxxxxx" maxlength="8" pattern="[0-9]{8}" required>
+                        <label for="txtDocumentIdAdd" class="form-label">Cédula/Pasaporte:</label>
+                        <input type="text" class="form-control" id="txtDocumentIdAdd" placeholder="Ej: 1-2345-6789 (Cédula) / ABC123456 (Pasaporte)" required>
                     </div>
                 </div>
                 <div class="row">
@@ -120,10 +70,23 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <label for="txtDocumentIdAdd" class="form-label">Cédula/Pasaporte:</label>
-                        <input type="text" class="form-control" id="txtDocumentIdAdd" placeholder="Ej: 1-2345-6789 (Cédula) / ABC123456 (Pasaporte)" required>
+                        <label for="txtNameAdd" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control"  placeholder="Escriba su nombre"  id="txtNameAdd">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="txtEmailAdd" class="form-label">Correo Electrónico:</label>
+                        <input type="email" class="form-control" placeholder="Ej: someone@example.com" id="txtEmailAdd" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="txtPhoneAdd" class="form-label">Teléfono (8 dígitos):</label>
+                        <input type="tel" class="form-control" id="txtPhoneAdd" placeholder="xxxxxxxx" maxlength="8" pattern="[0-9]{8}" required>
+                    </div>
+                </div>
+
                 <div class="row" style="display: none;">
                     <div class="col-12">
                         <label for="lblIdUserAdd" class="form-label">Usuario:</label>
@@ -133,13 +96,13 @@
                 <div class="row">
                     <div class="mb-3">
                         <label for="txtPassAdd" class="form-label">Contraseña:</label>
-                        <input type="password" class="form-control" id="txtPassAdd" required>
+                        <input type="password" class="form-control" placeholder="Escriba su contraseña" id="txtPassAdd" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3">
                         <label for="lblConfirmPassAdd" class="form-label">Confirmar Contraseña:</label>
-                        <input type="password" class="form-control" id="lblConfirmPassAdd" required>
+                        <input type="password" class="form-control"  placeholder="Confirme su contraseña"  id="lblConfirmPassAdd" required>
                     </div>
                 </div>
                 <div class="row">
@@ -179,7 +142,25 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <input type="hidden" id="txtIdUserModify"/>
+                    <div class="col-12">
+                        <label for="txtDocumentIdModify" class="form-label">Cédula/Pasaporte:</label>
+                        <input type="text" class="form-control" id="txtDocumentIdModify" placeholder="Ej: 1-2345-6789 (Cédula) / ABC123456 (Pasaporte)" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="ddlModifyIdentificationType">Selecciona un tipo de Identificación:</label>
+                        <select id="ddlModifyIdentificationType" name="TipoIdentificacionId" class="form-control">
+                            <option value="">Seleccione una opción...</option>
+                            @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.IdentificationList)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="hidden" id="txtIdUserModify" />
                     <div class="col-12">
                         <label for="txtNameModify" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="txtNameModify">
@@ -197,24 +178,8 @@
                         <input type="tel" class="form-control" id="txtPhoneModify" placeholder="xxxxxxxx" maxlength="8" pattern="[0-9]{8}" required>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label for="ddlModifyIdentificationType">Selecciona un tipo de Identificación:</label>
-                        <select id="ddlModifyIdentificationType" name="TipoIdentificacionId" class="form-control">
-                            <option value="">Seleccione una opción...</option>
-                            @foreach (var item in (IEnumerable<SelectListItem>)ViewBag.IdentificationList)
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <label for="txtDocumentIdModify" class="form-label">Cédula/Pasaporte:</label>
-                        <input type="text" class="form-control" id="txtDocumentIdModify" placeholder="Ej: 1-2345-6789 (Cédula) / ABC123456 (Pasaporte)" required>
-                    </div>
-                </div>
+
+
                 <div class="row" style="display: none;">
                     <div class="col-12">
                         <label for="lblIdUserModify" class="form-label">Usuario:</label>
@@ -299,7 +264,92 @@
             }
         });
 
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const searchUserByCedula = debounce(function (cedula) {
+            if (cedula.length >= 9) {
+                $.ajax({
+                    url: '@Url.Action("SearchUserByCedula", "User")',
+                    type: 'POST',
+                    data: { cedula: cedula },
+                    success: function (response) {
+                        if (response.success && response.data != null) {
+                            $('#txtNameAdd').val(response.data.CompletName + " " + response.data.CompletLastName);
+                            $('#txtNameAdd').attr('title', response.data.CompletName + " " + response.data.CompletLastName);
+                            $('#txtNameAdd').attr('readonly', true);
+                            var type = parseInt(response.data.GuessTypeValue);
+                            $('#ddlAddIdentificationType').val(type);
+                            $('#ddlAddIdentificationType').addClass('readonly-select');
+
+                            console.log(response);
+                            console.log(type);
+                        } else {
+
+                            $('#txtNameAdd').val('');
+                            $('#ddlAddIdentificationType').val('');
+                            $('#txtNameAdd').attr('title', "");
+                            $('#txtNameAdd').removeAttr('readonly');
+                            $('#ddlAddIdentificationType').val('');
+                            $('#ddlAddIdentificationType').removeClass('readonly-select');
+
+                        }
+                    },
+                    error: function () {
+                        alert('Error al consultar la cédula.');
+                        $('#txtNameAdd').val('');
+                        $('#ddlAddIdentificationType').val('');
+                    }
+                });
+            } else {
+                $('#txtNameAdd').val('');
+                $('#ddlAddIdentificationType').val('');
+            }
+        }, 500);
+
+        $('#txtDocumentIdAdd').on('input', function () {
+            var cedula = $(this).val().replace(/[^0-9]/g, '');
+            searchUserByCedula(cedula);
+        });
+
+
     });
+
+    function EmptyAddUserModal() {
+        $("#txtDocumentIdAdd").val('');
+        $("#ddlAddIdentificationType").val('').removeClass('readonly-select');
+        $("#txtNameAdd").val('').removeAttr('readonly').removeAttr('title');
+        $("#txtEmailAdd").val('');
+        $("#txtPhoneAdd").val('');
+        $("#txtUserAdd").val('');
+        $("#txtPassAdd").val('');
+        $("#lblConfirmPassAdd").val('');
+        $("#ddlAddUserRoles").val('');
+        $("#chkAddUser").prop("checked", false);
+    }
+    function EmptyModifyUserModal() {
+        $("#txtIdUserModify").val('');
+        $("#txtDocumentIdModify").val('');
+        $("#ddlModifyIdentificationType").val('');
+        $("#txtNameModify").val('');
+        $("#txtEmailModify").val('');
+        $("#txtPhoneModify").val('');
+        $("#txtUserModify").val('');
+        $("#txtPassModify").val('');
+        $("#txtConfirmPassModify").val('');
+        $("#ddlModifyRoles").val('');
+        $("#chkModifyUser").prop("checked", false);
+    }
 
 
     function OpenModalModifyRole(button, modal) {
@@ -329,7 +379,54 @@
 
         $("#chkAddUser").prop("checked", false);
     }
+    function RefresUser() {
+  
 
+  mostrarSpinner();
+         $.ajax({
+            url: '@Url.Action("RefresUserList", "User")',
+            type: 'GET',
+
+             success: function (partialView) {
+                 if ($.fn.DataTable.isDataTable('#tblUser')) {
+                     $('#tblUser').DataTable().destroy();
+                 }
+                $('#contenedorVistaParcial').html(partialView);
+
+                 $('#tblUser').DataTable({
+
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "responsive": true,
+                    "buttons": [
+                        'copy', 'excel', 'pdf', 'print'
+                    ],
+                    "lengthMenu": [[10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ registros por página",
+                        "zeroRecords": "No se encontraron registros",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrados de _MAX_ registros en total)",
+                        "search": "Buscar:",
+                        "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+},
+    error: function() {
+    alert('Ha ocurrido un error al obtener los datos.');
+                }
+    });
+  ocultarSpinner();
+
+ }
 </script>
 <script src="~/Content/JS/User/jsUser.js"></script>
 

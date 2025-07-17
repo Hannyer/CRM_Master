@@ -971,10 +971,9 @@
                   </div>
                 `);
 
-                    // Seleccionar solo si existe
                     if (hotel.ID.toString() === prevRoomId) {
                         card.addClass('selected');
-                        foundPrev = true; // Ya NO pones el val aquí
+                        foundPrev = true; 
                     }
 
                     card.on('click', function () {
@@ -987,8 +986,6 @@
 
                     container.append(card);
                 });
-
-                // Ahora aquí, solo si la habitación sigue existiendo, la pones
                 if (foundPrev) {
                     $('#ddlAddRoomModal').val(prevRoomId);
 

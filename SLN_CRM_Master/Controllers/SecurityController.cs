@@ -266,6 +266,16 @@ namespace SLN_CRM_Master.Controllers
 
             return View(List);
         }
+
+        [HttpGet]
+        public ActionResult RefresRole()
+        {
+
+            var roles = _roleService.GetList(new RoleE() { Opcion = 1 });
+
+
+            return PartialView("PartialViewRole", roles );
+        }
         [HttpPost]
         public string NewRole(RoleE role)
         {

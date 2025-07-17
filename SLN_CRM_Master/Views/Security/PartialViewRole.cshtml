@@ -1,0 +1,52 @@
+﻿@model IEnumerable<EntityLayer.RoleE>
+
+<div class="table-responsive">
+    <table id="tblRole" class="table table-hover table-custom">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.ID_Role)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    Acciones
+                </th>
+
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.ID_Role)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+
+                    <input type="checkbox" class="form-check-input readonly-checkbox" readonly="readonly" disabled="disabled" @(item.Status ? "checked" : "")>
+
+                </td>
+                <td>
+                    <button type="button" class="btn green-button" onclick="OpenModalModifyRole(this,'mdlModifyRole')" data-idrole="@item.ID_Role" data-description="@item.Description" data-status="@item.Status">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type="button" id="btnDeleteClient" class="btn btn-danger" onclick="DeleteRole(this)" data-idrole="@item.ID_Role">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+
+                </td>
+
+            </tr>
+        }
+
+    </table>
+</div>

@@ -1,10 +1,11 @@
 ﻿function NewRole() {
 
-    mostrarSpinner();
+   
     var Description = $("#txtDescription").val();
    
     var Opcion = 0;
     if (Description.length > 0) {
+        mostrarSpinner();
         var role = { Opcion: Opcion, Description: Description, Status:true};
         $.ajax({
             url: '/Security/NewRole',
@@ -17,7 +18,8 @@
                     text: response,
                     icon: 'success',
                     didClose: () => {
-                        window.location.href = '/Security/RoleIndex';
+                        $('#mdlAddRole').modal('hide');
+                        RefresRole();
                     }
                 });
             }
@@ -52,7 +54,8 @@ function ModifyRole() {
                     text: response,
                     icon: 'success',
                     didClose: () => {
-                        window.location.href = '/Security/RoleIndex';
+                        $('#mdlModifyRole').modal('hide');
+                        RefresRole();
                     }
                 });
 
@@ -100,7 +103,7 @@ function DeleteRole(button) {
                         text: response,
                         icon: 'success',
                         didClose: () => {
-                            window.location.href = '/Security/RoleIndex';
+                            RefresRole();
                         }
                     });
 

@@ -24,7 +24,9 @@
                     text: response,
                     icon: 'success',
                     didClose: () => {
-                        window.location.href = '/User/Index';
+                        $('#mdlAddUser').modal('hide');
+                        EmptyAddUserModal();
+                        RefresUser();
                     }
                 });
             } else {
@@ -64,7 +66,9 @@ function ModifyUser() {
                     text: response,
                     icon: 'success',
                     didClose: () => {
-                        window.location.href = '/User/Index';
+                        $('#mdlModifyUser').modal('hide');
+                        EmptyModifyUserModal();
+                        RefresUser();
                     }
                 });
 
@@ -115,7 +119,8 @@ function DeleteUser(user) {
                         text: response,
                         icon: 'success',
                         didClose: () => {
-                            window.location.href = '/User/Index';
+                           
+                            RefresUser();
                         }
                     });
 
@@ -131,11 +136,31 @@ function DeleteUser(user) {
 
 function Validate(txtName, txtPassw, txtConfirmPass, ddlDropDown, txtEmail, txtPhone, txtDocumentId, ddlIdentificationType, EsEditar) {
 
+   
+
+
+    if ($("#" + txtDocumentId).val() === '') {
+        Swal.fire('', 'Debe digitar la cédula o pasaporte.', 'error');
+        return false;
+    }
+
+    var documentID = $("#" + txtDocumentId).val();
+
+    var selectedIdTypeId = $("#" + ddlIdentificationType).val();
+    if (!isValidDocumentID(documentID, selectedIdTypeId)) {
+        Swal.fire('', 'El formato del documento de identificación no es válido para el tipo seleccionado.', 'error');
+        return false;
+    }
+    if (!EsEditar && SeachExistsId(documentID)) {
+        Swal.fire('', 'Ya existe un usuario con la identificación digitada.', 'error');
+        return false;
+    }
+
+  
     if ($("#" + txtName).val() === '') {
         Swal.fire('', 'Debe digitar el nombre de quien pertenece el usuario.', 'error');
         return false;
     }
-
     // ELIMINADA la validación de txtUser, ya que no es un parámetro
 
     if ($("#" + txtEmail).val() === '') {
@@ -160,19 +185,6 @@ function Validate(txtName, txtPassw, txtConfirmPass, ddlDropDown, txtEmail, txtP
         return false;
     }
 
-    if ($("#" + txtDocumentId).val() === '') {
-        Swal.fire('', 'Debe digitar la cédula o pasaporte.', 'error');
-        return false;
-    }
-
-    var documentID = $("#" + txtDocumentId).val();
-    // Esta línea ahora debería ser correcta porque ddlIdentificationType recibe el ID correcto.
-    var selectedIdTypeId = $("#" + ddlIdentificationType).val();
-
-    if (!isValidDocumentID(documentID, selectedIdTypeId)) {
-        Swal.fire('', 'El formato del documento de identificación no es válido para el tipo seleccionado.', 'error');
-        return false;
-    }
 
     if ($("#" + txtPassw).val() === '') {
         Swal.fire('', 'Debe digitar una contraseña.', 'error');
@@ -222,6 +234,12 @@ function SeachExistsUser(user) {
 function SeachExistsEmail(email) {
     return userList.find(function (usuario) {
         return usuario.Email.toLowerCase() === email.toLowerCase();
+    });
+}
+function SeachExistsId(idDocument) {
+    return userList.find(function (usuario) {
+        console.log(usuario);
+        return usuario.DocumentID.toLowerCase() === idDocument.toLowerCase();
     });
 }
 

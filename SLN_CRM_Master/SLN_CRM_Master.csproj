@@ -450,7 +450,10 @@
     </Compile>
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="model\DTo\ExpenseDetailDto.cs" />
+    <Compile Include="model\DTo\IDGometaResponseDTO.cs" />
     <Compile Include="model\DTo\ReservationDTO.cs" />
+    <Compile Include="model\DTo\ResultadoDTO.cs" />
+    <Compile Include="model\ExternalServer\ApiGometaServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -4850,6 +4853,8 @@
     <Content Include="Views\ReservationClient\Index.cshtml" />
     <Content Include="Views\Client\IndexS.cshtml" />
     <Content Include="Views\Client\IndexReservation.cshtml" />
+    <Content Include="Views\User\PartialViewUser.cshtml" />
+    <Content Include="Views\Security\PartialViewRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

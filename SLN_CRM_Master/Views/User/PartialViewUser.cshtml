@@ -1,0 +1,46 @@
+﻿@model List<EntityLayer.UserE>
+@using Newtonsoft.Json
+<div class="row">
+    <div class="table-responsive">
+
+        <table id="tblUser" class="table table-hover table-custom">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(model => user.Name)</td>
+                    <td>@Html.DisplayFor(model => user.Email)</td>
+
+                    <td>@Html.DisplayFor(model => user.Description)</td>
+                    <td>
+
+                        <input type="checkbox" class="form-check-input readonly-checkbox" readonly="readonly" disabled="disabled" @(user.Status ? "checked" : "")>
+
+                    </td>
+                    <td>
+                        <button type="button" class="btn green-button" onclick="EmptyModifyUserModal(); OpenModalModifyRole(this,'mdlModifyUser')" data-user='@JsonConvert.SerializeObject(user)'>
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" id="btnDeleteClient" class="btn btn-danger" onclick="DeleteUser('@JsonConvert.SerializeObject(user)')">
+
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+
+                    </td>
+                    <td>@Html.HiddenFor(model => user.Password)</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>

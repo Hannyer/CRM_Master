@@ -1,10 +1,14 @@
 ﻿
 using EntityLayer;
+using Newtonsoft.Json;
 using Service.IService;
 using Service.Service;
+using SLN_CRM_Master.model.ExternalServer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.ApplicationServices;
 using System.Web.Mvc;
@@ -147,6 +151,8 @@ namespace SLN_CRM_Master.Controllers
             }
         }
 
+
+
         public void FillDropDownListIdentificationType()
         {
             var Identification = _IdentificationTypeService.GetList(new IdentificationTypeE() { Opcion = 0 });
@@ -161,6 +167,47 @@ namespace SLN_CRM_Master.Controllers
 
             ViewBag.IdentificationList = IdentificationList;
 
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SearchUserByCedula(string cedula)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(cedula) || !System.Text.RegularExpressions.Regex.IsMatch(cedula, @"^\d{9,}$"))
+                {
+                    return Json(new { success = false, message = "La cédula debe contener al menos 9 dígitos numéricos." }, JsonRequestBehavior.AllowGet);
+                }
+
+
+                var resultado = await ApiGometaServer.SeachClient(cedula);
+
+                    return Json(new { success = true, data = resultado.Results.FirstOrDefault() }, JsonRequestBehavior.AllowGet);
+              
+            }
+            catch (HttpRequestException ex)
+            {
+                
+                return Json(new { success = false, message = $"Error de conexión: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (JsonException ex)
+            {
+              
+                return Json(new { success = false, message = $"Error al procesar la respuesta: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+              
+                return Json(new { success = false, message = $"Excepción: {ex.Message}" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult RefresUserList()
+        {
+
+            var list = _service.GetList(new UserE());
+            return PartialView("PartialViewUser", list);
         }
     }
 }
