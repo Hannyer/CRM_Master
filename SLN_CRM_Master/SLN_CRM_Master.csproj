@@ -3003,6 +3003,8 @@
     <Content Include="Content\JS\Reservation\jsReservationReport.js" />
     <Content Include="Content\JS\User\jsUser.js" />
     <Content Include="Content\JS\Role\jsRole.js" />
+    <Content Include="Content\lib\datatables\buttons.bootstrap5.min.css" />
+    <Content Include="Content\lib\datatables\dataTables.bootstrap5.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />

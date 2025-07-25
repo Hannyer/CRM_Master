@@ -22,13 +22,13 @@
                 </div>
             </div>
             <div class="col-md-2" style="padding-top: 1%">
-                <button type="submit" style="width:100%" class="btn green-button" id="btnExportDataTotalReport">Extaer Información</button>
+                <button type="submit" style="width:100%" class="btn green-button" id="btnExportDataTotalReport" onclick="ExportDataTotalReport()">Extaer Información</button>
             </div>
         </div>
         <div class="row" id="divBtnDownloadTotalReport" style="display:none">
             <div class="col-md-10"></div>
             <div class="col-md-2">
-                <a href="@Url.Action("ExportReservationsToExcel", "ReservationReport")" class="btn btn-cobrizo">Exportar a Excel</a>
+                <a href="@Url.Action("ExportReservationsToExcel", "ReservationReport")" style="display:none" class="btn btn-cobrizo">Exportar a Excel</a>
             </div>
         </div>
         <br />
@@ -47,15 +47,7 @@
 
 </div>
 
-
-<script>
-    $(document).ready(function () {
-        ExportDataTotalReportEStart();
-        ExportDataTotalReport();
-
-    });
-</script>
-
-
-<script src="~/Content/JS/Reservation/jsReservationReport.js"></script>
+@section scripts {
+    <script src="~/Content/JS/Reservation/jsReservationReport.js"></script>
+}
 
