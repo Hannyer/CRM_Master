@@ -21,12 +21,14 @@
             }
         </div>
     </div>
+
+    <div id="contenedorVistaParcial" style="padding-bottom: 2rem;">
+        @Html.Partial("PartialViewRole", Model)
+        <br />
+    </div>
 </div>
 
-<div id="contenedorVistaParcial" style="padding-bottom: 2rem;">
-    @Html.Partial("PartialViewRole", Model)
-    <br />
-</div>
+
 
 <br />
 
@@ -40,11 +42,9 @@
                 <h5 class="modal-title">Agregar Rol</h5>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <label for="lblRol" class="form-label">Descripción:</label>
-                        <input type="text" class="form-control" id="txtDescription" required>
-                    </div>
+                <div class="row m-0 p-0">
+                    <label for="lblRol" class="form-label">Descripción:</label>
+                    <input type="text" class="form-control" id="txtDescription" required>
                 </div>
 
 
@@ -70,17 +70,14 @@
                 <h5 class="modal-title">Modificar Rol</h5>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="mb-12">
-                        <label for="lblModifyName" class="form-label">Descripción:</label>
+                <div class="row m-0 p-0 align-items-center">
+                    <div class="col-md-8 mb-2">
+                        <label for="txtModifyDescription" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="txtModifyDescription" required>
                     </div>
-                </div>
-                <div class="row pt-4">
-                    <div class="mb-12">
-                        <label for="lblIdModifyCard" class="form-label">Estado:</label>
+                    <div class="col-md-4 mb-2 d-flex align-items-center" style="padding-top:6%">
+                        <label for="chkModifyRole" class="form-label me-2 mb-0">Estado:</label>
                         <input type="checkbox" class="form-check-input" id="chkModifyRole">
-
                     </div>
                 </div>
                 <div class="row">
@@ -101,48 +98,95 @@
     </div>
 </div>
 
-<script type="text/javascript">
 
-    $(document).ready(function () {
-
-
-        InitializeTable();
+@section scripts {
+    <script src="~/Content/JS/Role/jsRole.js"></script>
+}
 
 
-    });
 
-    function OpenModalModifyRole(button, modal) {
+@*<script type="text/javascript">
 
-        var ID_Role = $(button).data('idrole');
-        var description = $(button).data('description');
-        var status = $(button).data('status');
-        document.getElementById('txtModifyDescription').value = description;
-
-        $("#chkModifyRole").prop("checked", JSON.parse(status.toLowerCase()))
-        document.getElementById('hdfID_Role').value = ID_Role;
-        OpenModal(modal);
-    }
+        //$(document).ready(function () {
 
 
-    function InitializeTable() {
-        $('#tblRole').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "responsive": true,
-            "buttons": [
-                'copy', 'excel', 'pdf', 'print'
-            ],
+        //    InitializeTable();
 
-            "language": {
-                "lengthMenu": "Mostrar _MENU_ registros por página",
-                "zeroRecords": "No se encontraron registros",
-                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                "infoEmpty": "No hay registros disponibles",
-                "infoFiltered": "(filtrados de _MAX_ registros en total)",
-                "search": "Buscar:",
-                "paginate": {
+
+        //});
+
+        function OpenModalModifyRole(button, modal) {
+
+            var ID_Role = $(button).data('idrole');
+            var description = $(button).data('description');
+            var status = $(button).data('status');
+            document.getElementById('txtModifyDescription').value = description;
+
+            $("#chkModifyRole").prop("checked", JSON.parse(status.toLowerCase()))
+            document.getElementById('hdfID_Role').value = ID_Role;
+            OpenModal(modal);
+        }
+
+
+        //function InitializeTable() {
+        //    $('#tblRole').DataTable({
+        //        "paging": true,
+        //        "lengthChange": true,
+        //        "searching": true,
+        //        "ordering": true,
+        //        "responsive": true,
+        //        "buttons": [
+        //            'copy', 'excel', 'pdf', 'print'
+        //        ],
+
+        //        "language": {
+        //            "lengthMenu": "Mostrar _MENU_ registros por página",
+        //            "zeroRecords": "No se encontraron registros",
+        //            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        //            "infoEmpty": "No hay registros disponibles",
+        //            "infoFiltered": "(filtrados de _MAX_ registros en total)",
+        //            "search": "Buscar:",
+        //            "paginate": {
+        //                "first": "Primero",
+        //                "last": "Último",
+        //                "next": "Siguiente",
+        //                "previous": "Anterior"
+        //            }
+        //        }
+        //    });
+        //}
+
+    function RefresRole() {
+            mostrarSpinner();
+             $.ajax({
+                url: '@Url.Action("RefresRole", "Security")',
+                type: 'GET',
+
+                 success: function (partialView) {
+                     if ($.fn.DataTable.isDataTable('#tblRole')) {
+                         $('#tblRole').DataTable().destroy();
+                     }
+                    $('#contenedorVistaParcial').html(partialView);
+
+                     $('#tblRole').DataTable({
+
+                        "paging": true,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "responsive": true,
+                        "buttons": [
+                            'copy', 'excel', 'pdf', 'print'
+                        ],
+                        "lengthMenu": [[10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+                        "language": {
+                            "lengthMenu": "Mostrar _MENU_ registros por página",
+                            "zeroRecords": "No se encontraron registros",
+                            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                            "infoEmpty": "No hay registros disponibles",
+                            "infoFiltered": "(filtrados de _MAX_ registros en total)",
+                            "search": "Buscar:",
+                            "paginate": {
                     "first": "Primero",
                     "last": "Último",
                     "next": "Siguiente",
@@ -150,55 +194,15 @@
                 }
             }
         });
-    }
+    },
+        error: function() {
+        alert('Ha ocurrido un error al obtener los datos.');
+                    }
+        });
+      ocultarSpinner();
 
-function RefresRole() {
-        mostrarSpinner();
-         $.ajax({
-            url: '@Url.Action("RefresRole", "Security")',
-            type: 'GET',
-
-             success: function (partialView) {
-                 if ($.fn.DataTable.isDataTable('#tblRole')) {
-                     $('#tblRole').DataTable().destroy();
-                 }
-                $('#contenedorVistaParcial').html(partialView);
-
-                 $('#tblRole').DataTable({
-
-                    "paging": true,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "responsive": true,
-                    "buttons": [
-                        'copy', 'excel', 'pdf', 'print'
-                    ],
-                    "lengthMenu": [[10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
-                    "language": {
-                        "lengthMenu": "Mostrar _MENU_ registros por página",
-                        "zeroRecords": "No se encontraron registros",
-                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                        "infoEmpty": "No hay registros disponibles",
-                        "infoFiltered": "(filtrados de _MAX_ registros en total)",
-                        "search": "Buscar:",
-                        "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-            }
-        }
-    });
-},
-    error: function() {
-    alert('Ha ocurrido un error al obtener los datos.');
-                }
-    });
-  ocultarSpinner();
-
- }
+     }
 
 
-</script>
-<script src="~/Content/JS/Role/jsRole.js"></script>
+    </script>*@
+

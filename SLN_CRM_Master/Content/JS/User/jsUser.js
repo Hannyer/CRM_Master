@@ -1,4 +1,217 @@
-﻿function AddUser() {
+﻿$(document).ready(function () {
+    $('#tblUser').DataTable({
+        destroy: true,
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                text: '<i class="fa fa-copy"></i> Copiar',
+                title: 'Mantenimiento de usuario'
+            },
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel"></i> Excel',
+                title: 'Mantenimiento de usuario' 
+            }
+        ],
+        lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            zeroRecords: "No se encontraron registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            infoEmpty: "No hay registros disponibles",
+            infoFiltered: "(filtrados de _MAX_ registros en total)",
+            search: "Buscar:",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    });
+
+
+
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const searchUserByCedula = debounce(function (cedula) {
+        if (cedula.length >= 9) {
+            $.ajax({
+                url: '/User/SearchUserByCedula',
+                type: 'POST',
+                data: { cedula: cedula },
+                success: function (response) {
+                    if (response.success && response.data != null) {
+                        $('#txtNameAdd').val(response.data.CompletName + " " + response.data.CompletLastName);
+                        $('#txtNameAdd').attr('title', response.data.CompletName + " " + response.data.CompletLastName);
+                        $('#txtNameAdd').attr('readonly', true);
+                        var type = parseInt(response.data.GuessTypeValue);
+                        $('#ddlAddIdentificationType').val(type);
+                        $('#ddlAddIdentificationType').addClass('readonly-select');
+
+                        console.log(response);
+                        console.log(type);
+                    } else {
+
+                        $('#txtNameAdd').val('');
+                        $('#ddlAddIdentificationType').val('');
+                        $('#txtNameAdd').attr('title', "");
+                        $('#txtNameAdd').removeAttr('readonly');
+                        $('#ddlAddIdentificationType').val('');
+                        $('#ddlAddIdentificationType').removeClass('readonly-select');
+
+                    }
+                },
+                error: function () {
+                    alert('Error al consultar la cédula.');
+                    $('#txtNameAdd').val('');
+                    $('#ddlAddIdentificationType').val('');
+                }
+            });
+        } else {
+            $('#txtNameAdd').val('');
+            $('#ddlAddIdentificationType').val('');
+        }
+    }, 500);
+
+    $('#txtDocumentIdAdd').on('input', function () {
+        var cedula = $(this).val().replace(/[^0-9]/g, '');
+        searchUserByCedula(cedula);
+    });
+
+
+});
+
+function EmptyAddUserModal() {
+    $("#txtDocumentIdAdd").val('');
+    $("#ddlAddIdentificationType").val('').removeClass('readonly-select');
+    $("#txtNameAdd").val('').removeAttr('readonly').removeAttr('title');
+    $("#txtEmailAdd").val('');
+    $("#txtPhoneAdd").val('');
+    $("#txtUserAdd").val('');
+    $("#txtPassAdd").val('');
+    $("#lblConfirmPassAdd").val('');
+    $("#ddlAddUserRoles").val('');
+    $("#chkAddUser").prop("checked", false);
+}
+function EmptyModifyUserModal() {
+    $("#txtIdUserModify").val('');
+    $("#txtDocumentIdModify").val('');
+    $("#ddlModifyIdentificationType").val('');
+    $("#txtNameModify").val('');
+    $("#txtEmailModify").val('');
+    $("#txtPhoneModify").val('');
+    $("#txtUserModify").val('');
+    $("#txtPassModify").val('');
+    $("#txtConfirmPassModify").val('');
+    $("#ddlModifyRoles").val('');
+    $("#chkModifyUser").prop("checked", false);
+}
+
+
+function OpenModalModifyRole(button, modal) {
+    var userJson = button.getAttribute("data-user");
+    var user = JSON.parse(userJson);
+
+    document.getElementById('txtNameModify').value = user.Name;
+
+    document.getElementById('txtUserModify').value = user.User;
+    document.getElementById('txtPassModify').value = user.Password;
+    document.getElementById('txtConfirmPassModify').value = user.Password;
+    $("#ddlModifyRoles").val(user.Id_Role);
+    $("#chkModifyUser").prop("checked", JSON.parse(user.Status))
+    $("#txtIdUserModify").val(user.ID);
+    $('#txtEmailModify').val(user.Email);
+    $('#txtPhoneModify').val(user.PhoneNumber);
+    $('#ddlModifyIdentificationType').val(user.IdIdentificationType);
+    $('#txtDocumentIdModify').val(user.DocumentID);
+    $("#ddlModifyRoles").val(user.Id_Role);
+    $("#chkModifyUser").prop("checked", user.Status);
+    OpenModal(modal);
+}
+
+function Empty() {
+    $("#txtUserAdd").val('');
+    $("#txtPassAdd").val('');
+
+    $("#chkAddUser").prop("checked", false);
+}
+function RefresUser() {
+
+
+    mostrarSpinner();
+    $.ajax({
+        url: '/User/RefresUserList',
+        type: 'GET',
+
+        success: function (partialView) {
+            if ($.fn.DataTable.isDataTable('#tblUser')) {
+                $('#tblUser').DataTable().destroy();
+            }
+            $('#contenedorVistaParcial').html(partialView);
+
+
+            $('#tblUser').DataTable({
+                destroy: true,
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        text: '<i class="fa fa-copy"></i> Copiar',
+                        title: 'Mantenimiento de usuario'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        title: 'Mantenimiento de usuario'
+                    }
+                ],
+                lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+                language: {
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron registros",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrados de _MAX_ registros en total)",
+                    search: "Buscar:",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+        },
+        error: function () {
+            alert('Ha ocurrido un error al obtener los datos.');
+        }
+    });
+    ocultarSpinner();
+
+}
+function AddUser() {
     var Name = $("#txtNameAdd").val();
     var User = $("#txtUserAdd").val(); 
     var Password = $("#txtPassAdd").val();
