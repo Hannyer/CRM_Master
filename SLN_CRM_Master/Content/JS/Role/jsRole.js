@@ -1,4 +1,13 @@
-﻿function NewRole() {
+﻿$(document).ready(function () {
+
+
+    InitializeTable();
+
+
+});
+
+
+function NewRole() {
 
    
     var Description = $("#txtDescription").val();
@@ -114,5 +123,116 @@ function DeleteRole(button) {
             });
         }
     });
+
+}
+
+function OpenModalModifyRole(button, modal) {
+
+    var ID_Role = $(button).data('idrole');
+    var description = $(button).data('description');
+    var status = $(button).data('status');
+    document.getElementById('txtModifyDescription').value = description;
+
+    $("#chkModifyRole").prop("checked", JSON.parse(status.toLowerCase()))
+    document.getElementById('hdfID_Role').value = ID_Role;
+    OpenModal(modal);
+}
+
+
+function InitializeTable() {
+    // Inicializa o reinicializa el DataTable
+    $('#tblRole').DataTable({
+        destroy: true,
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                text: '<i class="fa fa-copy"></i> Copiar',
+                title: 'Configuración'
+            },
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel"></i> Excel',
+                title: 'Configuración'
+            }
+        ],
+        lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+        language: {
+            lengthMenu: "Mostrar _MENU_ registros por página",
+            zeroRecords: "No se encontraron registros",
+            info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+            infoEmpty: "No hay registros disponibles",
+            infoFiltered: "(filtrados de _MAX_ registros en total)",
+            search: "Buscar:",
+            paginate: {
+                first: "Primero",
+                last: "Último",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    });
+}
+
+function RefresRole() {
+    mostrarSpinner();
+    $.ajax({
+        url: '/Security/RefresRole',
+        type: 'GET',
+
+        success: function (partialView) {
+            if ($.fn.DataTable.isDataTable('#tblRole')) {
+                $('#tblRole').DataTable().destroy();
+            }
+            $('#contenedorVistaParcial').html(partialView);
+
+            // Inicializa o reinicializa el DataTable
+            $('#tblRole').DataTable({
+                destroy: true,
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        text: '<i class="fa fa-copy"></i> Copiar',
+                        title: 'Configuración'
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i> Excel',
+                        title: 'Configuración'
+                    }
+                ],
+                lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+                language: {
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron registros",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrados de _MAX_ registros en total)",
+                    search: "Buscar:",
+                    paginate: {
+                        first: "Primero",
+                        last: "Último",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                }
+            });
+        },
+        error: function () {
+            alert('Ha ocurrido un error al obtener los datos.');
+        }
+    });
+    ocultarSpinner();
 
 }

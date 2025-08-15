@@ -1,4 +1,250 @@
-﻿function NewReservation() {
+﻿//$(document).ready(function () {
+
+//    OpenModalAddReservation();
+//    CloseModalAddReservation();
+//    CloseModalModifyReservation();
+
+//    $('#mdlAddReservation').on('hidden.bs.modal', clearNewReservationModal);
+
+//    var fechaActual = new Date();
+//    var fechaFormateada = fechaActual.toISOString().split('T')[0];
+//    $('#txtCheckIn').val(fechaFormateada);
+//    $('#txtCheckOut').val(fechaFormateada);
+//    $('#txtCheckInReservation').val(fechaFormateada);
+//    $('#txtCheckOutReservation').val(fechaFormateada);
+//    if ($.fn.DataTable.isDataTable('#tblReservation')) {
+//        $('#tblReservation').DataTable().destroy();
+//    }
+
+//    $('#tblReservation').DataTable({
+
+//        "paging": true,
+//        "lengthChange": true,
+//        "searching": true,
+//        "ordering": true,
+//        "responsive": true,
+//        "buttons": [
+//            'copy', 'excel', 'pdf', 'print'
+//        ],
+//        "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+//        "language": {
+//            "lengthMenu": "Mostrar _MENU_ registros por página",
+//            "zeroRecords": "No se encontraron registros",
+//            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+//            "infoEmpty": "No hay registros disponibles",
+//            "infoFiltered": "(filtrados de _MAX_ registros en total)",
+//            "search": "Buscar:",
+//            "paginate": {
+//                "first": "Primero",
+//                "last": "Último",
+//                "next": "Siguiente",
+//                "previous": "Anterior"
+//            }
+//        }
+//    });
+
+
+
+//    $('#ddlReservationStatus').change(function () {
+//        var selectedValue = $(this).val();
+//        var checkInVal = $('#txtCheckInReservation').val();
+//        var checkOutVal = $('#txtCheckOutReservation').val();
+
+//        if (!(checkInVal instanceof Date)) checkInVal = new Date(checkInVal);
+//        if (!(checkOutVal instanceof Date)) checkOutVal = new Date(checkOutVal);
+
+
+//        var formattedStartDate = checkInVal.toISOString().slice(0, 19).replace('T', ' ');
+//        var formattedEndDate = checkOutVal.toISOString().slice(0, 19).replace('T', ' ');
+
+//        mostrarSpinner();
+//        $.ajax({
+//            url: '@Url.Action("SeachReservationByStatus", "Reservation")',
+//            type: 'GET',
+//            data: {
+//                reservationStatus: selectedValue,
+//                StartDate: formattedStartDate,
+//                EndDate: formattedEndDate
+//            },
+//            success: function (partialView) {
+//                if ($.fn.DataTable.isDataTable('#tblReservation')) {
+//                    $('#tblReservation').DataTable().destroy();
+//                }
+//                $('#contenedorVistaParcial').html(partialView);
+
+//                $('#tblReservation').DataTable({
+//                    "scrollX": true,
+//                    "paging": true,
+//                    "lengthChange": true,
+//                    "searching": true,
+//                    "ordering": true,
+//                    "responsive": true,
+//                    "buttons": [
+//                        'copy', 'excel', 'pdf', 'print'
+//                    ],
+//                    "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, "Todo"]],
+//                    "language": {
+//                        "lengthMenu": "Mostrar _MENU_ registros por página",
+//                        "zeroRecords": "No se encontraron registros",
+//                        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+//                        "infoEmpty": "No hay registros disponibles",
+//                        "infoFiltered": "(filtrados de _MAX_ registros en total)",
+//                        "search": "Buscar:",
+//                        "paginate": {
+//                            "first": "Primero",
+//                            "last": "Último",
+//                            "next": "Siguiente",
+//                            "previous": "Anterior"
+//                        }
+//                    }
+//                });
+//            },
+//            error: function () {
+//                alert('Ha ocurrido un error al obtener los datos.');
+//            }
+//        });
+//        ocultarSpinner();
+//    });
+
+
+
+
+//    $('#txtCheckIn').on('change', function () {
+//        var originalCheckIn = $(this).data('lastValue');
+//        var newCheckIn = $(this).val();
+//        var checkOutVal = $('#txtCheckOut').val();
+
+//        if (new Date(newCheckIn) >= new Date(checkOutVal)) {
+//            if (originalCheckIn) {
+//                $(this).val(originalCheckIn);
+//            }
+//        } else {
+//            $(this).data('lastValue', newCheckIn);
+//            var Days = tmpDays(newCheckIn, checkOutVal);
+
+
+//            Expense_Details(Days, 'txtExpenseDetails');
+//            var guestCount = parseInt($("#txtGuestCount").val()) || 1;
+//            updateDatalistHotelRoomFromServer('AddRoomList', newCheckIn, checkOutVal, guestCount);
+
+//        }
+//    }).data('lastValue', $('#txtCheckIn').val());
+
+//    $('#txtCheckOut').on('change', function () {
+//        var originalCheckOut = $(this).data('lastValue');
+//        var newCheckOut = $(this).val();
+//        var checkInVal = $('#txtCheckIn').val();
+
+//        if (new Date(newCheckOut) <= new Date(checkInVal)) {
+//            if (originalCheckOut) {
+//                $(this).val(originalCheckOut);
+//            }
+//        } else {
+//            $(this).data('lastValue', newCheckOut);
+//            var Days = tmpDays(checkInVal, newCheckOut);
+
+
+//            Expense_Details(Days, 'txtExpenseDetails');
+//            var guestCount = parseInt($("#txtGuestCount").val()) || 1;
+//            updateDatalistHotelRoomFromServer('AddRoomList', checkInVal, newCheckOut, guestCount);
+
+//        }
+//    }).data('lastValue', $('#txtCheckOut').val());
+//    $('#txtGuestCount').on('change', function () {
+//        clearRoomSelection();
+//        var checkIn = $('#txtCheckIn').val();
+//        var checkOut = $('#txtCheckOut').val();
+//        var guestCount = parseInt($(this).val()) || 1;
+
+//        var Days = tmpDays(checkIn, checkOut);
+//        Expense_Details(Days, 'txtExpenseDetails');
+
+//        updateDatalistHotelRoomFromServer('AddRoomList', checkIn, checkOut, guestCount);
+
+//    });
+
+//    var fechaActual = new Date().toISOString().split('T')[0];
+//    $('#txtCheckIn, #txtCheckOut').attr('min', fechaActual);
+//    $('#txtModifyCheckIn, #txtModifyCheckOut').attr('min', fechaActual);
+
+//    InitializerEventDropDownListClassic('ddlAddRoomModal', 'AddRoomList');
+
+//    InitializerEventDropDownList2('ddlModifyReservationModal', 'ModifyReservationList', 'ModifyTarifaList', '');
+//    InitializerEventDropDownListClient('ddlModifyTarifaModal', 'ModifyTarifaList', 'Buscar tarifa...', 'txtModifyDescription', 'txtExpenseDetails', 'AddRoomList');
+
+//    $('#ddlAddReservationModal').select2({
+//        dropdownParent: $('#mdlAddReservation'),
+//        placeholder: 'Buscar cliente...',
+//        allowClear: true,
+//        minimumInputLength: 2,
+//        language: {
+//            inputTooShort: function (args) {
+//                return 'Por favor ingrese ' + args.minimum + ' o más caracteres';
+//            },
+//            noResults: function () {
+//                return "No se encontraron resultados";
+//            },
+//            searching: function () {
+//                return "Buscando...";
+//            }
+//        },
+//        ajax: {
+//            url: '/Reservation/BuscarClientes',
+//            dataType: 'json',
+//            delay: 250,
+//            data: function (params) {
+//                return {
+//                    term: params.term
+//                };
+//            },
+//            processResults: function (data) {
+//                console.log(data)
+//                return {
+
+//                    results: data.map(function (cliente) {
+//                        console.log(cliente.id)
+//                        return {
+//                            id: cliente.id,
+//                            text: cliente.nombre + ' - ' + cliente.cedula + ' (' + cliente.correo + ')'
+//                        };
+//                    })
+//                };
+//            },
+//            cache: true
+//        }
+//    });
+
+//    $('#ddlAddReservationModal').on('change', function () {
+//        const clientId = $(this).val();
+//        const clientName = $('#ddlAddReservationModal option:selected').text();
+//        const checkIn = $('#txtCheckIn').val();
+//        const checkOut = $('#txtCheckOut').val();
+//        const guestCount = parseInt($("#txtGuestCount").val()) || 1;
+//        const roomId = $("#ddlAddRoomModal").val();
+
+
+//        const nights = tmpDays(checkIn, checkOut);
+
+//        const shouldClean =
+//            !clientId || !checkIn || !checkOut || nights <= 0;
+
+//        if (shouldClean) {
+//            $("#txtDescription").val("");
+//            $("#txtExpenseDetails").val("");
+//            return;
+//        }
+
+
+//        updateDatalistHotelRoomFromServer("AddRoomList", checkIn, checkOut, guestCount);
+//    });
+
+//    $('#ddlAddReservationModal').on('select2:select', function (e) {
+//        const selectedClient = e.params.data;
+//        console.log("Cliente seleccionado:", selectedClient);
+//    });
+
+//});
+function NewReservation() {
     try {
         if (!ValidateReservation(
             '#ddlAddReservationModal',
@@ -431,3 +677,155 @@ function SendDeposit(){
 
 }
 
+// Prueba arreglar js
+
+
+function ExportDataTotalReportTMP() {
+    $('#mdlAddReservation').modal('show');
+    const checkIn = $('#txtCheckIn').val();
+    const checkOut = $('#txtCheckOut').val();
+    const guests = parseInt($('#txtGuestCount').val(), 10) || 1;
+    updateDatalistHotelRoomFromServer('roomCardsContainer', checkIn, checkOut, guests);
+}
+function updateDatalistHotelRoomFromServer(dataListContainerId, startDate, endDate, guestCount) {
+    const prevRoomId = $('#ddlAddRoomModal').val();
+
+    if (!(startDate instanceof Date)) startDate = new Date(startDate);
+    if (!(endDate instanceof Date)) endDate = new Date(endDate);
+
+    const formattedStartDate = startDate.toISOString().slice(0, 19).replace('T', ' ');
+    const formattedEndDate = endDate.toISOString().slice(0, 19).replace('T', ' ');
+
+    $.ajax({
+        type: "GET",
+        url: "/Reservation/GetHotelRoomListByCapacity",
+        data: {
+            StartDate: formattedStartDate,
+            EndDate: formattedEndDate,
+            GuestCount: guestCount
+        },
+        success: function (data) {
+            const container = $('#roomCardsContainer');
+            container.empty();
+
+            if (data.length === 0) {
+                Swal.fire('', 'No hay habitaciones disponibles en las fechas solicitadas.', 'error');
+                clearRoomSelection();
+                return;
+            }
+
+            let foundPrev = false;
+            data.forEach(hotel => {
+                const card = $(`
+                  <div class="room-card" data-room-id="${hotel.ID}">
+                    <strong>${hotel.Description}</strong><br/>
+                    <span>Precio: ₡${parseFloat(hotel.Price).toLocaleString('es-CR', { minimumFractionDigits: 2 })}</span><br/>
+                    <span>USD: $${parseFloat(hotel.DolarPrice).toFixed(2)}</span><br/>
+                    <small>ID: ${hotel.ID}</small>
+                  </div>
+                `);
+
+                if (hotel.ID.toString() === prevRoomId) {
+                    card.addClass('selected');
+                    foundPrev = true;
+                }
+
+                card.on('click', function () {
+                    $('.room-card').removeClass('selected');
+                    $(this).addClass('selected');
+                    $('#ddlAddRoomModal').val(hotel.ID);
+                    const days = tmpDays($('#txtCheckIn').val(), $('#txtCheckOut').val());
+                    Expense_Details(days, 'txtExpenseDetails');
+                });
+
+                container.append(card);
+            });
+            if (foundPrev) {
+                $('#ddlAddRoomModal').val(prevRoomId);
+
+                const days = tmpDays($('#txtCheckIn').val(), $('#txtCheckOut').val());
+                Expense_Details(days, 'txtExpenseDetails');
+            } else {
+                $("#ddlAddRoomModal").val('');
+                clearRoomSelection();
+            }
+        },
+        error: function (error) {
+            console.error("Error al obtener habitaciones:", error);
+        }
+    });
+}
+
+function myfunction() {
+
+    mostrarSpinner();
+    var selectedRoleId = '1';
+    if (selectedRoleId === '') {
+        selectedRoleId = '0';
+    }
+
+
+
+    $('#tblPermissons').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "responsive": true,
+        "buttons": [
+            'copy', 'excel', 'pdf', 'print'
+        ],
+        "lengthMenu": [[25, 50, 100], [25, 50, "Todo"]],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ registros por página",
+            "zeroRecords": "No se encontraron registros",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+
+            "infoFiltered": "(filtrados de _MAX_ registros en total)",
+            "search": "Buscar:",
+            "paginate": {
+                "first": "Primero",
+                "last": "Último",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        }
+    });
+
+
+    console.log(selectedRoleId);
+
+    $.ajax({
+     /*   url: '@Url.Action("PartialPermissionView", "Security")',*/
+        url: '/Security/PartialPermissionView',
+        type: 'GET',
+        data: { roleId: selectedRoleId },
+        success: function (data) {
+
+           
+            $("#tblPermissons").html(data);
+            ocultarSpinner();
+        }
+
+    });
+    //$("#ddlRoles").change(function () {
+    //    mostrarSpinner();
+    //    var selectedRoleId = $(this).val();
+    //    if (selectedRoleId === '') {
+    //        selectedRoleId = '0';
+    //    }
+    //    console.log(selectedRoleId);
+
+    //    $.ajax({
+    //        url: '@Url.Action("PartialPermissionView", "Security")',
+    //        type: 'GET',
+    //        data: { roleId: selectedRoleId },
+    //        success: function (data) {
+
+    //            $("#tblPermissons").html(data);
+    //            ocultarSpinner();
+    //        }
+
+    //    });
+    //});
+}

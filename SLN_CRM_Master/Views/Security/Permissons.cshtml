@@ -9,25 +9,35 @@
 
 <h2 style="text-align-last: center;">Mantenimiento de acceso a la aplicación</h2>
 
-@using (Html.BeginForm("SendData", "Security", FormMethod.Post, new { @style = "padding: 1rem;" }))
-{
+<div class="row" style="padding-bottom: 2rem; padding-top: 2rem; justify-content: right; ">
+    @using (Html.BeginForm("SendData", "Security", FormMethod.Post, new { @style = "padding: 1rem;" }))
+    {
 
-    <div class="form-group" style="padding-bottom:2rem;">
-        <label for="ddlRoles">Seleccione un rol:</label>
-        @Html.DropDownList("SelectedRoleId", (IEnumerable<SelectListItem>)ViewBag.RoleList, "Selecciona un rol", new { @id = "ddlRoles", @class = "form-control" })
+        <div class="form-group" style="padding-bottom:2rem;">
+            <label for="ddlRoles">Seleccione un rol:</label>
+            @Html.DropDownList("SelectedRoleId", (IEnumerable<SelectListItem>)ViewBag.RoleList, "Selecciona un rol", new { @id = "ddlRoles", @class = "form-control", onchange = "myfunction()" })
 
-    </div>
+        </div>
 
-    @Html.Partial("PartialPermissionView", Model);
-    <input type="hidden" id="selectedData" name="selectedData" />
+        <div id="contenedorVistaParcialPermissionView" style="padding-bottom: 2rem;">
+            @Html.Partial("PartialPermissionView", Model)
+            <br />
+        </div>
 
-    <button type="button" id="captureButton" class="btn green-button align-content-center">Guardar</button>
 
-}
+       
+        <input type="hidden" id="selectedData" name="selectedData" />
+
+        <button type="button" id="captureButton" class="btn green-button align-content-center">Guardar</button>
+
+    }
+</div>
+
+
 
 
 <script>
-    $(document).ready(function () {
+    @*$(document).ready(function () {
 
         $('#tblPermissons').DataTable({
             "paging": true,
@@ -43,7 +53,7 @@
                 "lengthMenu": "Mostrar _MENU_ registros por página",
                 "zeroRecords": "No se encontraron registros",
                 "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                
+
                 "infoFiltered": "(filtrados de _MAX_ registros en total)",
                 "search": "Buscar:",
                 "paginate": {
@@ -159,11 +169,13 @@
             $(this).toggleClass('selected-row');
         });
 
-    });
+    });*@
 
-   
+
 
 
 </script>
 
-
+@section scripts {
+    <script src="~/Content/JS/Permissons/jsPermissons.js"></script>
+}

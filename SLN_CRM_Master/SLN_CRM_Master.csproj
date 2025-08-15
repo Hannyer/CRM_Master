@@ -2992,8 +2992,10 @@
     <Content Include="Content\Img\tarde.png" />
     <Content Include="Content\Img\TurismoLogo.png" />
     <Content Include="Content\JS\Client\select2.min.js" />
+    <Content Include="Content\JS\Configuration\jsConfiguration.js" />
     <Content Include="Content\JS\jsClient.js" />
     <Content Include="Content\JS\jsDailyJobsE.js" />
+    <Content Include="Content\JS\Permissons\jsPermissons.js" />
     <Content Include="Content\JS\PhoneInput\ImgFlags\flags%402x.png" />
     <Content Include="Content\JS\PhoneInput\ImgFlags\flags.png" />
     <Content Include="Content\JS\PhoneInput\intlTelInput.css" />
@@ -3001,8 +3003,11 @@
     <Content Include="Content\JS\PhoneInput\JS\utils.js" />
     <Content Include="Content\JS\Reservation\jsReservation.js" />
     <Content Include="Content\JS\Reservation\jsReservationReport.js" />
+    <Content Include="Content\JS\Reservation\jsTotalReport.js" />
     <Content Include="Content\JS\User\jsUser.js" />
     <Content Include="Content\JS\Role\jsRole.js" />
+    <Content Include="Content\lib\datatables\buttons.bootstrap5.min.css" />
+    <Content Include="Content\lib\datatables\dataTables.bootstrap5.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
