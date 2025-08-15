@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLN_CRM_Master", "SLN_CRM_Master\SLN_CRM_Master.csproj", "{31289A0B-2D15-4D33-9C5E-19A77193470B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM_Master_API", "CRM_Master_API\CRM_Master_API.csproj", "{37E29506-9825-4FA1-89BE-3E91E11C243D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Core", "Repository.Core\Repository.Core.csproj", "{26C83DCA-B9C4-94D6-AE6A-CC989C926095}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{31289A0B-2D15-4D33-9C5E-19A77193470B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31289A0B-2D15-4D33-9C5E-19A77193470B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31289A0B-2D15-4D33-9C5E-19A77193470B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E29506-9825-4FA1-89BE-3E91E11C243D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E29506-9825-4FA1-89BE-3E91E11C243D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E29506-9825-4FA1-89BE-3E91E11C243D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E29506-9825-4FA1-89BE-3E91E11C243D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C83DCA-B9C4-94D6-AE6A-CC989C926095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C83DCA-B9C4-94D6-AE6A-CC989C926095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C83DCA-B9C4-94D6-AE6A-CC989C926095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C83DCA-B9C4-94D6-AE6A-CC989C926095}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
