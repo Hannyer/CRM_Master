@@ -38,6 +38,10 @@ namespace Repository.Core.Repository
                         cmd.Parameters.AddWithValue("@P_KEY04", configurationE.KEY04);
                         cmd.Parameters.AddWithValue("@P_KEY05", configurationE.KEY05);
                         cmd.Parameters.AddWithValue("@P_KEY06", configurationE.KEY06);
+                        cmd.Parameters.AddWithValue("@P_PAGE", configurationE.Page);
+                        cmd.Parameters.AddWithValue("@P_PAGESIZE", configurationE.PageSize);
+                        cmd.Parameters.AddWithValue("@P_SEARCH", configurationE.Search);
+                        cmd.Parameters.AddWithValue("@P_SORT", configurationE.Sort);
 
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {

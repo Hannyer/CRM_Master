@@ -82,7 +82,8 @@ namespace CRM_Master_API.Controllers
         [HttpPost("ListSettings")]
         public async Task<ActionResult<PagedResult<ConfigurationDto>>> List([FromBody] ConfigurationFilterRequest req)
         {
-            var List =  _configurationServices.GetList(new ConfigurationE() {Opcion=0 });
+            var List =  _configurationServices.GetList(new ConfigurationE() {Opcion=0,Page=req.Page,PageSize=req.PageSize,
+            Search=req.Search, Sort=req.Sort});
             return Ok(new PagedResult<ConfigurationDto>(List, List.Count()));
         }
         }
