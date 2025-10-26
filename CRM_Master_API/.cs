@@ -1,8 +1,1 @@
-﻿bin/
-obj/
-.vs/
-.vscode/
-.git/
-.gitignore
-*.user
-*.suo
+﻿
