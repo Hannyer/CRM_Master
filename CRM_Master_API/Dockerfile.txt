@@ -1,0 +1,27 @@
+# Imagen base para ejecutar la aplicación
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+# Imagen con el SDK para compilar el proyecto
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copia todo el contenido del proyecto al contenedor
+COPY . .
+
+# Restaura las dependencias del proyecto
+RUN dotnet restore
+
+# Compila y publica la aplicación en modo Release
+RUN dotnet publish -c Release -o /app/publish
+
+# Etapa final: imagen ligera solo con los binarios
+FROM base AS final
+WORKDIR /app
+
+# Copia los archivos publicados desde la etapa de compilación
+COPY --from=build /app/publish .
+
+# Comando para ejecutar la aplicación
+ENTRYPOINT ["dotnet", "CRM_Master_API.dll"]
